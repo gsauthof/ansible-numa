@@ -50,7 +50,6 @@ ansible_facts:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.utils.vars import merge_hash
 
 import glob
 
