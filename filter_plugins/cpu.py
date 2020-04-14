@@ -6,6 +6,8 @@
 
 def cpumask(cores, fmt='hex'):
     r = 0
+    if type(cores) is not list:
+        cores = [ cores ]
     for x in cores:
         r |= 1 << x
     if fmt == 'hex':
@@ -14,6 +16,8 @@ def cpumask(cores, fmt='hex'):
         return str(r)
 
 def mapidx(xs, ys):
+    if type(xs) is not list:
+        return ys[xs]
     zs = []
     for x in xs:
         zs.append(ys[x])
