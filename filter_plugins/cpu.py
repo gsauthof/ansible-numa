@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 # -*- coding: utf-8 -*-
 
 # SPDX-FileCopyrightText: © 2020 Georg Sauthoff <mail@gms.tf>
