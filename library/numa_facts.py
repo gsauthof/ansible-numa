@@ -46,26 +46,25 @@ ansible_facts:
       description:
         - Dictonary of NUMA facts
       type: dict
-      sample: { "numa_cores": [  [0, 1, 6, 7], [2, 3, 4, 5] ] }
+      sample: { "numa_cores": [  0, 1, 6, 7, 2, 3, 4, 5 ] }
 '''
 
 from ansible.module_utils.basic import AnsibleModule
 
-import glob
-
 def get_numa_cores():
     xs = []
-    nodes = glob.glob('/sys/devices/system/node/node*')
-    def f(x):
-        i = x.rindex('node')+4
-        return x[:i], int(x[i:])
-    nodes.sort(key=f)
-    for node in nodes:
-        with open(node + '/cpumap') as f:
-            m = f.read()
-        for i, x in enumerate(reversed( bin(int(m, 16))[2:] )):
-            if x == '1':
-                xs.append(i)
+    i = 0
+    try:
+        while True:
+            with open('/sys/devices/system/node/node{}/cpulist'.format(i)) as f:
+                m = f.read()
+            ys = sum(([list(range(int(x), int(y)+1))
+                         for (x, y) in (z.split('-'),)][0] if '-' in z
+                             else [int(z)] for z in m.split(',')), [])
+            xs.extend(ys)
+            i += 1
+    except IOError:
+        pass
     return xs
 
 def run_module():
